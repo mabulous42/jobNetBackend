@@ -151,7 +151,8 @@ const allEmployer = async (req, res, next) => {
     }
 }
 
-const jobs = async (req, res, next) => {
+//this contoller saves the new job posted by the employer in the database (post request)
+const postJob = async (req, res, next) => {
     const { jobTitle, jobDescription, salaryType, min_salary, max_salary, jobType, requiredSkills, author, email } = req.body;
     // let date = DateTimeDisplay()
     console.log(jobTitle, jobDescription, salaryType, min_salary, max_salary, jobType, requiredSkills, email, author);
@@ -268,7 +269,7 @@ const submitApplication = async (req, res, next) => {
     }
 }
 
-// this controller checks all the posted jobs and returns all
+// this controller checks all the posted jobs and returns all the
 // jobs posted by a particular employer using the email to find
 const employerJobs = async (req, res, next) => {
     try {
@@ -282,10 +283,24 @@ const employerJobs = async (req, res, next) => {
     }
 }
 
+//this control finds a finds a particular job with its ID
+const editJob = async (req, res, next) => {
+    try {
+        const id = req.params.id
+        console.log(id);
+        const result = await postedJobsModel.findById({_id: id})
+        console.log(result);
+        res.status(200).send(result);
+    } catch (error) {
+        console.log(error);
+        next(error)
+    }
+}
+
 
 module.exports = {
     registerAsEmployer, registerAsUser, userLogin,
     employerLogin, updateUserSkill, userDashboard, allUsers, allEmployer,
-    employerDashboard, jobs, allJobs, employerInbox, uploadCV, submitApplication,
-    employerJobs
+    employerDashboard, postJob, allJobs, employerInbox, uploadCV, submitApplication,
+    employerJobs, editJob
 }
